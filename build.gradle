@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id "org.flywaydb.flyway" version "9.22.3"
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.postgresql:postgresql:42.7.4'
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    implementation 'org.hibernate.orm:hibernate-core:6.6.1.Final'
+    implementation 'org.hibernate.orm:hibernate-hikaricp:6.6.1.Final'
+    implementation 'com.zaxxer:HikariCP:6.0.0'
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'ch.qos.logback:logback-classic:1.5.7'
+}
+
+flyway {
+    url = System.getenv("GOIT_DB_URL")
+    user = System.getenv("GOIT_DB_USER")
+    password = System.getenv("GOIT_DB_PASS")
+    locations = ['filesystem:src/main/resources/db/migration']
+    cleanDisabled = false
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes('Main-Class': 'org.example.AppLauncher')
+    }
+    archiveFileName = "dbcat.jar"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+// A custom Gradle task to run the application
+tasks.register('run', JavaExec) {
+    group = 'application'
+    description = 'Run the main class of the project'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'org.example.AppLauncher'
+}
