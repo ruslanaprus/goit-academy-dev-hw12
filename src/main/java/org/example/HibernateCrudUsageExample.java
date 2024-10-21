@@ -8,21 +8,23 @@ public class HibernateCrudUsageExample {
     public static void main(String[] args) {
         ClientService clientService = new ClientService();
 
-        // Створення нової Client
+        // create new Client
         Client newClient = new Client();
-        newClient.setName("John Doe");
+        newClient.setName("Kitten Paw");
         clientService.saveClient(newClient);
 
-        // Читаємо та виводимо Client по id
-        Client client = clientService.findClientById(1L);
+        // read and display Client by id
+        Client client = clientService.findClientById(4L);
         System.out.println("Found client: " + client.getName());
 
-        // Оновлюємо client
-        client.setName("Jane Doe");
+        // update client
+        client.setName("Meow Meow");
+        client.setEmail("cute@example.com");
         clientService.updateClient(client);
 
-        // Видаляємо Client
-        clientService.deleteClient(client);
+        // delete Client
+        Client clientBob = clientService.findClientById(2L);
+        clientService.deleteClient(clientBob);
 
         HibernateUtil.getInstance().close();
     }

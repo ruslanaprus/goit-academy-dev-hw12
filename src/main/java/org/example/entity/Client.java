@@ -8,8 +8,10 @@ import lombok.Data;
 @Data
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column()
     private String name;
+    @Column
+    private String email;
 }
