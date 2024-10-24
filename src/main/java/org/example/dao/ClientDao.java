@@ -1,13 +1,13 @@
 package org.example.dao;
 
-import org.example.config.HibernateUtil;
-import org.example.entity.Client;
+import org.example.config.HibernateConfig;
+import org.example.model.Client;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 public class ClientDao {
-    private SessionFactory sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+    private SessionFactory sessionFactory = HibernateConfig.getInstance().getSessionFactory();
 
     // Create
     public void save(Client person) {

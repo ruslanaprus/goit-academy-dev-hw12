@@ -1,23 +1,23 @@
 package org.example.config;
 
 import lombok.Getter;
-import org.example.entity.Client;
+import org.example.model.Client;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import java.util.Properties;
 
-public class HibernateUtil {
+public class HibernateConfig {
 
-    private static final HibernateUtil INSTANCE;
+    private static final HibernateConfig INSTANCE;
 
     @Getter
     private final SessionFactory sessionFactory;
 
     static {
-        INSTANCE = new HibernateUtil();
+        INSTANCE = new HibernateConfig();
     }
 
-    private HibernateUtil() {
+    private HibernateConfig() {
         Properties properties = new Properties();
         properties.put("hibernate.connection.provider_class", "org.hibernate.hikaricp.internal.HikariCPConnectionProvider");
         properties.put("hibernate.hikari.dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
@@ -37,7 +37,7 @@ public class HibernateUtil {
                 .buildSessionFactory();
     }
 
-    public static HibernateUtil getInstance() {
+    public static HibernateConfig getInstance() {
         return INSTANCE;
     }
 
