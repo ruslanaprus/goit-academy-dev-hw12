@@ -1,7 +1,16 @@
+CREATE SEQUENCE IF NOT EXISTS seq_clients_id
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE SEQUENCE IF NOT EXISTS seq_tickets_id
+    START WITH 1
+    INCREMENT BY 1;
+
 CREATE TABLE IF NOT EXISTS clients (
-	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	id BIGINT DEFAULT nextval('seq_clients_id'),
 	name VARCHAR(200) NOT NULL CHECK (length(name) BETWEEN 3 AND 200),
-    email VARCHAR(200) UNIQUE
+    email VARCHAR(200) UNIQUE,
+    CONSTRAINT pk_clients_id PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS planets (
@@ -10,11 +19,12 @@ CREATE TABLE IF NOT EXISTS planets (
 );
 
 CREATE TABLE IF NOT EXISTS tickets (
-	id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	id BIGINT DEFAULT nextval('seq_tickets_id'),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     client_id INTEGER NOT NULL,
     from_planet_id VARCHAR(10) NOT NULL,
     to_planet_id VARCHAR(10) NOT NULL,
+    CONSTRAINT pk_tickets_id PRIMARY KEY (id),
     CONSTRAINT fk_client
         FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE,
     CONSTRAINT fk_planet

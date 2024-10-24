@@ -35,9 +35,9 @@ public class ClientService {
         return clientDao.findById(id);
     }
 
-//    public List<Client> findAll() {
-//        return clientDao.findAll();
-//    }
+    public List<Client> findAll() {
+        return clientDao.findAll();
+    }
 
     public void updateClient(Client client) {
         clientDao.update(client);

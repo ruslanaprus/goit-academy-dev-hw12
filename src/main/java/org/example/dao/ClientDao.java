@@ -6,40 +6,53 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.util.List;
+
 public class ClientDao {
     private SessionFactory sessionFactory = HibernateConfig.getInstance().getSessionFactory();
 
-    // Create
-    public void save(Client person) {
+    public void save(Client client) {
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
-            session.save(person);
-            tx.commit();
+            Transaction transaction = session.beginTransaction();
+            session.persist(client);
+            transaction.commit();
         }
     }
 
-    // Read
     public Client findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(Client.class, id);
+            Transaction transaction = session.beginTransaction();
+            var client = session.get(Client.class, id);
+            transaction.commit();
+            return client;
         }
     }
 
-    // Update
+    public List<Client> findAll() {
+        try(Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            var clientsQuery = session.createQuery("from Client", Client.class);
+            clientsQuery.setFirstResult(1);
+            clientsQuery.setMaxResults(10);
+            var clients = clientsQuery.getResultList();
+            transaction.commit();
+            return clients;
+        }
+    }
+
     public void update(Client person) {
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
             session.update(person);
-            tx.commit();
+            transaction.commit();
         }
     }
 
-    // Delete
     public void delete(Client person) {
         try (Session session = sessionFactory.openSession()) {
-            Transaction tx = session.beginTransaction();
-            session.delete(person);
-            tx.commit();
+            Transaction transaction = session.beginTransaction();
+            session.remove(person);
+            transaction.commit();
         }
     }
 }

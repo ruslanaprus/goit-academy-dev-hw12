@@ -3,29 +3,43 @@ package org.example;
 import org.example.config.HibernateConfig;
 import org.example.model.Client;
 import org.example.service.ClientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class HibernateCrudUsageExample {
+    private static final Logger logger = LoggerFactory.getLogger(HibernateCrudUsageExample.class);
+
     public static void main(String[] args) {
         ClientService clientService = new ClientService();
 
-        // create new Client
-//        Client newClient = new Client();
-//        newClient.setName("Kitten Paw");
-//        clientService.saveClient(newClient);
+        // create a new Client
+        Client newClient = new Client();
+        newClient.setName("Kitten Paw");
+        clientService.saveClient(newClient);
 
         // read and display Client by id
-        Client client = clientService.findClientById(5L);
-        System.out.println("Found client: " + client.getName());
+        long clientId = 5L;
+        Client client = clientService.findClientById(clientId);
+        if (client != null) {
+            logger.info("Client with ID {} found: {}", clientId, client);
+        } else {
+            logger.warn("No client found with ID {}", clientId);
+        }
 
-        // update client
-        client.setName("Meow Meow");
-        client.setEmail("cute2@example.com");
-        clientService.updateClient(client);
-
-        // delete Client
-//        Client clientBob = clientService.findClientById(2L);
-//        clientService.deleteClient(clientBob);
+        // find and display all clients
+        List<Client> clients = clientService.findAll();
+        if (!clients.isEmpty()) {
+            logger.info("Found {} clients.", clients.size());
+            for (Client c : clients) {
+                logger.info("Client: {}", c);
+            }
+        } else {
+            logger.warn("No clients found.");
+        }
 
         HibernateConfig.getInstance().close();
+        logger.info("Hibernate session factory closed.");
     }
 }
