@@ -5,21 +5,27 @@ import org.example.model.Client;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class ClientDao {
-    private SessionFactory sessionFactory = HibernateConfig.getInstance().getSessionFactory();
+    private static final Logger logger = LoggerFactory.getLogger(ClientDao.class);
+    private final SessionFactory sessionFactory = HibernateConfig.getInstance().getSessionFactory();
 
     public void save(Client client) {
+        logger.debug("Opening session for saving client");
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.persist(client);
             transaction.commit();
+            logger.debug("Client saved successfully: {}", client);
         }
     }
 
     public Client findById(Long id) {
+        logger.debug("Opening session for finding client with ID: {}", id);
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             var client = session.get(Client.class, id);
@@ -29,10 +35,11 @@ public class ClientDao {
     }
 
     public List<Client> findAll() {
+        logger.debug("Opening session for finding all clients");
         try(Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             var clientsQuery = session.createQuery("from Client", Client.class);
-            clientsQuery.setFirstResult(1);
+            clientsQuery.setFirstResult(5);
             clientsQuery.setMaxResults(10);
             var clients = clientsQuery.getResultList();
             transaction.commit();
@@ -40,19 +47,28 @@ public class ClientDao {
         }
     }
 
-    public void update(Client person) {
+    public void update(Client client) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.update(person);
+            session.merge(client);
             transaction.commit();
         }
     }
 
-    public void delete(Client person) {
+    public void delete(Long id) {
+        logger.debug("Opening session for deleting client with id: {}", id);
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.remove(person);
+            var client = session.get(Client.class, id);
+            if (client != null) {
+                session.remove(client);
+                logger.debug("Client deleted successfully: {}", client);
+            } else {
+                logger.warn("Client with id {} not found. Did not delete", id);
+            }
             transaction.commit();
+        } catch (Exception e) {
+            logger.error("Error while deleting client with id: {}, {}", id, e.getMessage());
         }
     }
 }
