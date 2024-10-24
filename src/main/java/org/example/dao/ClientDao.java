@@ -36,7 +36,7 @@ public class ClientDao {
 
     public List<Client> findAll() {
         logger.debug("Opening session for finding all clients");
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             var clientsQuery = session.createQuery("from Client", Client.class);
             clientsQuery.setFirstResult(5);
@@ -47,9 +47,22 @@ public class ClientDao {
         }
     }
 
-    public void update(Client client) {
+    public void update(Long id, Client updatedClient) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
+            var client = session.get(Client.class, id);
+            if (client == null) {
+                throw new IllegalArgumentException("Client with id " + id + " not found");
+            }
+
+            if (updatedClient.getName() != null) {
+                client.setName(updatedClient.getName());
+            }
+
+            if (updatedClient.getEmail() != null) {
+                client.setEmail(updatedClient.getEmail());
+            }
+
             session.merge(client);
             transaction.commit();
         }

@@ -46,8 +46,8 @@ public class ClientService {
         return clientDao.findAll();
     }
 
-    public void updateClient(Client client) {
-        clientDao.update(client);
+    public void updateClient(Long id, Client client) {
+        clientDao.update(id, client);
     }
 
     public void deleteClient(Long id) {
