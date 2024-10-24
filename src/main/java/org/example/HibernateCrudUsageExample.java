@@ -16,18 +16,18 @@ public class HibernateCrudUsageExample {
 
         // create a new Client
         Client newClient = new Client();
-        newClient.setName("Kitten Paw");
-        clientService.saveClient(newClient);
+//        newClient.setName("Kitten Paw");
+//        clientService.saveClient(newClient);
 
         // update the client
-        long clientIdToUpdate = 16L;
-        newClient.setEmail("kitten@example.com");
+        long clientIdToUpdate = 20L;
+        newClient.setEmail("kitten.meowss@example.com");
         clientService.updateClient(clientIdToUpdate, newClient);
         logger.info("Client updated: {}", newClient);
 
 
-        long clientIdToDelete = 16L;
-        clientService.deleteClient(clientIdToDelete);
+//        long clientIdToDelete = 16L;
+//        clientService.deleteClient(clientIdToDelete);
 
         // read and display Client by id
         long clientId = 5L;

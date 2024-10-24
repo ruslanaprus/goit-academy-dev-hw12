@@ -1,7 +1,7 @@
 package org.example.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.dao.ClientDao;
+import org.example.dao.GenericDao;
 import org.example.model.Client;
 import org.example.util.RequestToEntityMapper;
 import org.slf4j.Logger;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class ClientService {
     private static final Logger logger = LoggerFactory.getLogger(ClientService.class);
-    private final ClientDao clientDao = new ClientDao();
+    private final GenericDao<Client, Long> clientDao = new GenericDao<>(Client.class);
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void saveClient(Client client) {

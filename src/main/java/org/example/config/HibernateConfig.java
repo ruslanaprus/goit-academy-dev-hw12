@@ -2,6 +2,7 @@ package org.example.config;
 
 import lombok.Getter;
 import org.example.model.Client;
+import org.example.model.Planet;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import java.util.Properties;
@@ -34,6 +35,7 @@ public class HibernateConfig {
         sessionFactory = new Configuration()
                 .addProperties(properties)
                 .addAnnotatedClass(Client.class)
+                .addAnnotatedClass(Planet.class)
                 .buildSessionFactory();
     }
 
