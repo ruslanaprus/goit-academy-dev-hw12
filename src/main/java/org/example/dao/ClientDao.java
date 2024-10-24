@@ -63,7 +63,6 @@ public class ClientDao {
                 client.setEmail(updatedClient.getEmail());
             }
 
-            session.merge(client);
             transaction.commit();
         }
     }
