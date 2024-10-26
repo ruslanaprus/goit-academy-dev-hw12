@@ -45,8 +45,8 @@ public class GenericDao<T, ID> {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             var query = session.createQuery("from " + entityClass.getSimpleName(), entityClass);
-            query.setFirstResult(5);
-            query.setMaxResults(10);
+            query.setFirstResult(1);
+            query.setMaxResults(99);
             var list = query.getResultList();
             transaction.commit();
             return list;

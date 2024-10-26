@@ -31,7 +31,7 @@ public class HibernateCrudUsageExample {
 
         // read and display Client by id
         long clientId = 5L;
-        Client client = clientService.findClientById(clientId);
+        Client client = clientService.findById(clientId);
         if (client != null) {
             logger.info("Client with ID {} found: {}", clientId, client);
         } else {

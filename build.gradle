@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id "org.flywaydb.flyway" version "9.22.3"
+    id 'war'
 }
 
 group = 'org.example'
@@ -24,6 +25,10 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.18.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.0'
     implementation 'jakarta.persistence:jakarta.persistence-api:3.2.0'
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+    implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
 }
 
 flyway {
@@ -38,21 +43,6 @@ test {
     useJUnitPlatform()
 }
 
-tasks.named('jar') {
-    manifest {
-        attributes('Main-Class': 'org.example.AppLauncher')
-    }
-    archiveFileName = "dbcat.jar"
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
-// A custom Gradle task to run the application
-tasks.register('run', JavaExec) {
-    group = 'application'
-    description = 'Run the main class of the project'
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'org.example.AppLauncher'
+war {
+    archiveFileName = "travel-servlet-${version}.war"
 }

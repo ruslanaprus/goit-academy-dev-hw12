@@ -37,7 +37,7 @@ public class ClientService {
         logger.info("Client saved successfully from parameters");
     }
 
-    public Client findClientById(Long id) {
+    public Client findById(Long id) {
         logger.info("Finding client with ID: {}", id);
         return clientDao.findById(id);
     }
