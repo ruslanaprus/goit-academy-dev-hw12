@@ -154,8 +154,8 @@
         <form action="/deleteClientById" method="get">
             <div class="mb-3">
                 <label for="clientId" class="form-label">Client ID:</label>
-                <input type="text" id="clientToDeleteId" class="form-control" name="clientId" placeholder="Enter client ID">
-                <button type="submit" class="btn btn-primary mt-3 w-100">Delete</button>
+                <input type="text" id="clientIdToDelete" class="form-control" name="clientId" placeholder="Enter client ID">
+                <button type="submit" class="btn btn-danger mt-3 w-100">Delete</button>
             </div>
         </form>
     </div>
@@ -177,12 +177,6 @@
                     'Content-Type': 'application/json'
                 },
                 body: jsonData
-            }).then(response => {
-                if (response.ok) {
-                    alert('Client created successfully!');
-                } else {
-                    alert('Error creating client.');
-                }
             });
         });
     });

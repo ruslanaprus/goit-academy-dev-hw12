@@ -27,6 +27,10 @@ public class TravelServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         String servletPath = req.getServletPath();
         Context context = new Context();
+        String message = req.getParameter("message");
+        if (message != null) {
+            context.setVariable("message", message);
+        }
         switch (servletPath) {
             case "/createClientForm" -> {
                 context.setVariable("action", "createClientForm");
@@ -86,7 +90,7 @@ public class TravelServlet extends HttpServlet {
                 context.setVariable("action", "deleteClientByIdForm");
                 templateConfig.process("index", context, res);
             }
-            case "/deleteClient" -> {
+            case "/deleteClientById" -> {
                 String clientId = req.getParameter("clientId");
                 boolean isDeleted = clientService.deleteClient(Long.parseLong(clientId));
                 context.setVariable("message", isDeleted ? "Client deleted successfully." : "Failed to delete client.");
@@ -103,10 +107,10 @@ public class TravelServlet extends HttpServlet {
         try {
             clientService.saveClient(req.getReader());
             context.setVariable("message", "Client created successfully.");
-            res.setStatus(200);
+            res.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {
             context.setVariable("message", "Error creating client: " + e.getMessage());
-            res.setStatus(500);
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         context.setVariable("action", "createClient");
         templateConfig.process("index", context, res);
