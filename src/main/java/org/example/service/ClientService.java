@@ -46,13 +46,31 @@ public class ClientService {
         return clientDao.findAll();
     }
 
-    public void updateClient(Long id, Client client) {
-        clientDao.update(id, client);
+    public boolean updateClient(Long id, Client client) {
+        try {
+            int rowsUpdated = clientDao.update(id, client);
+            return rowsUpdated > 0;
+        } catch (Exception e) {
+            logger.error("Failed to update client with id: {}", id, e);
+            return false;
+        }
     }
 
-    public void deleteClient(Long id) {
-        logger.info("Deleting client with id: {}", id);
-        clientDao.delete(id);
-        logger.info("Client deleted successfully");
+    public boolean deleteClient(Long id) {
+        try {
+            logger.info("Deleting client with id: {}", id);
+            int rowsDeleted = clientDao.delete(id);
+            if (rowsDeleted > 0) {
+                logger.info("Client deleted successfully");
+                return true;
+            } else {
+                logger.warn("No client found with id: {}", id);
+                return false;
+            }
+        } catch (Exception e) {
+            logger.error("Failed to delete client with id: {}", id, e);
+            return false;
+        }
     }
+
 }

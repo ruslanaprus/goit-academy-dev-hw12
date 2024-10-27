@@ -53,13 +53,14 @@ public class GenericDao<T, ID> {
         }
     }
 
-    public void update(ID id, T updatedEntity) {
+    public int update(ID id, T updatedEntity) {
         logger.debug("Opening session for updating entity with ID: {}", id);
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             T existingEntity = session.get(entityClass, id);
             if (existingEntity == null) {
-                throw new IllegalArgumentException("Entity with id " + id + " not found");
+                logger.warn("Entity with ID {} not found. Update aborted.", id);
+                return 0;
             }
 
             for (Field field : entityClass.getDeclaredFields()) {
@@ -78,25 +79,30 @@ public class GenericDao<T, ID> {
             }
             transaction.commit();
             logger.debug("Entity with ID {} updated successfully", id);
+            return 1;
         } catch (HibernateException e) {
             logger.error("Failed to update entity: {}, {}", id, e.getMessage());
+            return 0;
         }
     }
 
-    public void delete(ID id) {
+    public int delete(ID id) {
         logger.debug("Opening session for deleting entity with ID: {}", id);
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             T entity = session.get(entityClass, id);
             if (entity != null) {
                 session.remove(entity);
+                transaction.commit();
                 logger.debug("Entity with ID {} deleted successfully", id);
+                return 1;
             } else {
                 logger.warn("Entity with ID {} not found. Did not delete", id);
+                return 0;
             }
-            transaction.commit();
         } catch (Exception e) {
             logger.error("Error while deleting entity with ID: {}, {}", id, e.getMessage());
+            return 0;
         }
     }
 }

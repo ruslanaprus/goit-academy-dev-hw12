@@ -65,12 +65,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/findAllClients">Find All</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/deleteClientByIdForm">Delete Client</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
 <div class="container">
+    <div th:if="${message}" class="alert alert-info">
+        <p th:text="${message}"></p>
+    </div>
     <div th:if="${action == 'createClientForm'}" class="form-container">
         <h2>Create Client</h2>
         <form id="client-form">
@@ -141,6 +147,17 @@
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <div th:if="${action == 'deleteClientByIdForm'}" class="form-container mt-3">
+        <h2>Delete Client by ID</h2>
+        <form action="/deleteClientById" method="get">
+            <div class="mb-3">
+                <label for="clientId" class="form-label">Client ID:</label>
+                <input type="text" id="clientToDeleteId" class="form-control" name="clientId" placeholder="Enter client ID">
+                <button type="submit" class="btn btn-primary mt-3 w-100">Delete</button>
+            </div>
+        </form>
     </div>
 </div>
 
