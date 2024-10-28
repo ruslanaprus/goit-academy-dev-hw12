@@ -13,9 +13,17 @@ import org.thymeleaf.context.Context;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/planetManager", "/createPlanetForm", "/findPlanetByIdForm", "/findPlanetById",
-        "/findAllPlanets", "/createPlanet", "/updatePlanet", "/updatePlanetForm",
-        "/deletePlanetByIdForm", "/deletePlanetById"})
+@WebServlet(urlPatterns = {
+        "/planetManager",
+        "/createPlanetForm",
+        "/findPlanetByIdForm",
+        "/updatePlanetForm",
+        "/deletePlanetByIdForm",
+        "/findPlanetById",
+        "/findAllPlanets",
+        "/createPlanet",
+        "/updatePlanet",
+        "/deletePlanetById"})
 public class PlanetServlet extends HttpServlet {
     private final TemplateConfig templateConfig = new TemplateConfig();
     private final PlanetService planetService = new PlanetService();
@@ -40,8 +48,13 @@ public class PlanetServlet extends HttpServlet {
             }
             case "/findPlanetById" -> {
                 String planetId = req.getParameter("planetId");
-                Planet planet = planetService.findPlanetById(planetId);
-                context.setVariable("planet", planet);
+                Planet planetById = planetService.findPlanetById(planetId);
+                if (planetById != null) {
+                    context.setVariable("planet", planetById);
+                    context.setVariable("message", "Planet found successfully.");
+                } else {
+                    context.setVariable("message", "Planet not found.");
+                }
                 context.setVariable("action", "planetDetails");
                 templateConfig.process("planet", context, res);
             }
@@ -55,23 +68,56 @@ public class PlanetServlet extends HttpServlet {
                 context.setVariable("action", "updatePlanetForm");
                 templateConfig.process("planet", context, res);
             }
+            case "/updatePlanet" -> {
+                String planetId = req.getParameter("planetId");
+                String name = req.getParameter("name");
+                Planet updatedPlanet = new Planet();
+                boolean isUpdated = false;
+
+                if (name != null && !name.isEmpty()) {
+                    updatedPlanet.setName(name);
+                }
+                if (planetId != null && !planetId.isEmpty()) {
+                    updatedPlanet.setId(planetId);
+                }
+
+                try {
+                    isUpdated = planetService.updatePlanet(planetId, updatedPlanet);
+                    context.setVariable("message", isUpdated ? "Planet updated successfully." : "Failed to update planet.");
+                } catch (Exception e) {
+                    context.setVariable("message", "Error updating planet: " + e.getMessage());
+                }
+
+                context.setVariable("action", "updatePlanet");
+                templateConfig.process("planet", context, res);
+            }
             case "/deletePlanetByIdForm" -> {
                 context.setVariable("action", "deletePlanetByIdForm");
                 templateConfig.process("planet", context, res);
             }
+            case "/deletePlanetById" -> {
+                String planetId = req.getParameter("planetId");
+                boolean isDeleted = planetService.deletePlanet(planetId);
+                context.setVariable("message", isDeleted ? "Planet deleted successfully." : "Failed to delete planet.");
+                context.setVariable("action", "deletePlanetById");
+                templateConfig.process("planet", context, res);
+            }
+            default -> templateConfig.process("planet", context, res);
         }
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-//        String planetId = req.getParameter("planetId");
-//        String name = req.getParameter("name");
-//        String galaxy = req.getParameter("galaxy");
-//
-//        Planet planet = new Planet(planetId, name, galaxy);
-//
-//        planetService.savePlanet(planet);
-//
-//        res.sendRedirect("/findAllPlanets?message=Planet created successfully.");
-//    }
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        Context context = new Context();
+        try {
+            planetService.savePlanet(req.getReader());
+            context.setVariable("message", "Planet created successfully.");
+            res.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            context.setVariable("message", "Error creating planet: " + e.getMessage());
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        context.setVariable("action", "createPlanet");
+        templateConfig.process("planet", context, res);
+    }
 }

@@ -14,8 +14,18 @@ import org.example.service.ClientService;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/", "/createClientForm", "/findClientByIdForm", "/findById",
-        "/findAllClients", "/createClient", "/updateClient", "/updateClientForm", "/deleteClientByIdForm", "/deleteClientById"})
+@WebServlet(urlPatterns = {
+        "/",
+        "/clientManager",
+        "/createClientForm",
+        "/findClientByIdForm",
+        "/updateClientForm",
+        "/deleteClientByIdForm",
+        "/findById",
+        "/findAllClients",
+        "/createClient",
+        "/updateClient",
+        "/deleteClientById"})
 public class TravelServlet extends HttpServlet {
     private final TemplateConfig templateConfig = new TemplateConfig();
     private final ClientService clientService = new ClientService();
@@ -33,7 +43,7 @@ public class TravelServlet extends HttpServlet {
         }
         switch (servletPath) {
             case "/" -> templateConfig.process("home", context, res);
-            case "clientManager" -> templateConfig.process("client", context, res);
+            case "/clientManager" -> templateConfig.process("client", context, res);
             case "/createClientForm" -> {
                 context.setVariable("action", "createClientForm");
                 templateConfig.process("client", context, res);

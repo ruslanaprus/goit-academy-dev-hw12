@@ -81,6 +81,10 @@
         <h2>Create Planet</h2>
         <form id="planet-form">
             <div class="mb-3">
+                <label for="newPlanetId" class="form-label">Name:</label>
+                <input type="text" id="newPlanetId" class="form-control" name="planetId" placeholder="Enter planet id">
+            </div>
+            <div class="mb-3">
                 <label for="planetName" class="form-label">Name:</label>
                 <input type="text" id="planetName" class="form-control" name="name" placeholder="Enter planet name">
             </div>
@@ -103,9 +107,9 @@
         </form>
     </div>
 
-    <div th:if="${action == 'findByIdForm'}" class="form-container mt-3">
+    <div th:if="${action == 'findPlanetByIdForm'}" class="form-container mt-3">
         <h2>Find Planet by ID</h2>
-        <form action="/findById" method="get">
+        <form action="/findPlanetById" method="get">
             <div class="mb-3">
                 <label for="planetId" class="form-label">Planet ID:</label>
                 <input type="text" id="planetId" class="form-control" name="planetId" placeholder="Enter planet ID">
