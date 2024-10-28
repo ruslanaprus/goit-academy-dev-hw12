@@ -32,13 +32,15 @@ public class TravelServlet extends HttpServlet {
             context.setVariable("message", message);
         }
         switch (servletPath) {
+            case "/" -> templateConfig.process("home", context, res);
+            case "clientManager" -> templateConfig.process("client", context, res);
             case "/createClientForm" -> {
                 context.setVariable("action", "createClientForm");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/findClientByIdForm" -> {
                 context.setVariable("action", "findByIdForm");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/findById" -> {
                 String clientId = req.getParameter("clientId");
@@ -50,17 +52,17 @@ public class TravelServlet extends HttpServlet {
                     context.setVariable("message", "Client not found.");
                 }
                 context.setVariable("action", "clientDetails");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/findAllClients" -> {
                 List<Client> clients = clientService.findAll();
                 context.setVariable("action", "allClientDetails");
                 context.setVariable("clients", clients);
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/updateClientForm" -> {
                 context.setVariable("action", "updateClientForm");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/updateClient" -> {
                 String clientId = req.getParameter("clientId");
@@ -84,20 +86,20 @@ public class TravelServlet extends HttpServlet {
                 }
 
                 context.setVariable("action", "updateClient");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/deleteClientByIdForm" -> {
                 context.setVariable("action", "deleteClientByIdForm");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
             case "/deleteClientById" -> {
                 String clientId = req.getParameter("clientId");
                 boolean isDeleted = clientService.deleteClient(Long.parseLong(clientId));
                 context.setVariable("message", isDeleted ? "Client deleted successfully." : "Failed to delete client.");
                 context.setVariable("action", "deleteClient");
-                templateConfig.process("index", context, res);
+                templateConfig.process("client", context, res);
             }
-            default -> templateConfig.process("index", context, res);
+            default -> templateConfig.process("client", context, res);
         }
     }
 
@@ -113,6 +115,6 @@ public class TravelServlet extends HttpServlet {
             res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         context.setVariable("action", "createClient");
-        templateConfig.process("index", context, res);
+        templateConfig.process("client", context, res);
     }
 }
