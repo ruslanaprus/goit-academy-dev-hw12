@@ -2,6 +2,13 @@
 
 The Travel Management System is a Java-based web application that manages client and planet records using PostgreSQL database. It uses Hibernate ORM for data access, Flyway for database migration, and Thymeleaf for rendering HTML templates. The primary purpose of this project is to provide a backend service for managing clients and planets, allowing CRUD operations through HTTP requests.
 
+## Table of Contents
+1. [Project Structure](#project-structure)
+2. [Tools and Libraries](#tools-and-libraries)
+3. [Functionalities](#functionalities)
+3. [Setup Instructions](#setup-instructions)
+4. [Usage Examples](#usage-examples)
+
 ## Project Structure
 
 The project is structured as follows:
