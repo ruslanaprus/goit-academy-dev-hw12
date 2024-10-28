@@ -11,32 +11,39 @@
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
         }
+
         .navbar {
             margin-bottom: 20px;
         }
+
         .form-container {
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
+
         h2 {
             margin-bottom: 20px;
             color: #0d6efd;
         }
+
         .btn-primary {
             background-color: #0d6efd;
             border-color: #0d6efd;
         }
+
         .btn-primary:hover {
             background-color: #0b5ed7;
             border-color: #0a58ca;
         }
+
         table {
             background: white;
             border-radius: 8px;
             overflow: hidden;
         }
+
         th {
             background-color: #0d6efd;
             color: white;
@@ -48,7 +55,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Planet Manager</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -79,10 +87,10 @@
     </div>
     <div th:if="${action == 'createPlanetForm'}" class="form-container">
         <h2>Create Planet</h2>
-        <form id="planet-form">
+        <form id="planet-form" action="/createPlanet" method="post">
             <div class="mb-3">
                 <label for="newPlanetId" class="form-label">Name:</label>
-                <input type="text" id="newPlanetId" class="form-control" name="planetId" placeholder="Enter planet id">
+                <input type="text" id="newPlanetId" class="form-control" name="id" placeholder="Enter planet id">
             </div>
             <div class="mb-3">
                 <label for="planetName" class="form-label">Name:</label>
@@ -97,7 +105,8 @@
         <form action="/updatePlanet">
             <div class="mb-3">
                 <label for="planetId" class="form-label">Planet ID:</label>
-                <input type="text" id="planetToUpdateId" class="form-control" name="planetId" placeholder="Enter planet ID">
+                <input type="text" id="planetToUpdateId" class="form-control" name="planetId"
+                       placeholder="Enter planet ID">
             </div>
             <div class="mb-3">
                 <label for="planetName" class="form-label">Name:</label>
@@ -147,7 +156,8 @@
         <form action="/deletePlanetById" method="get">
             <div class="mb-3">
                 <label for="planetId" class="form-label">Planet ID:</label>
-                <input type="text" id="planetIdToDelete" class="form-control" name="planetId" placeholder="Enter planet ID">
+                <input type="text" id="planetIdToDelete" class="form-control" name="planetId"
+                       placeholder="Enter planet ID">
                 <button type="submit" class="btn btn-danger mt-3 w-100">Delete</button>
             </div>
         </form>
@@ -176,6 +186,9 @@
                 } else {
                     alert('Error creating planet.');
                 }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
             });
         });
     });
