@@ -31,6 +31,8 @@ public class HibernateConfig {
         properties.put("hibernate.hikari.connectionTimeout", "20000");
         properties.put("hibernate.hikari.poolName", "MyHikariCPPool");
         properties.put("hibernate.hikari.maxLifetime", "1800000");
+        properties.put("hibernate.hikari.initializationFailTimeout", "0");
+        properties.put("hibernate.hikari.leakDetectionThreshold", "2000");
 
         sessionFactory = new Configuration()
                 .addProperties(properties)
