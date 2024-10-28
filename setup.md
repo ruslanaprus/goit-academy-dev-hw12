@@ -10,4 +10,7 @@ Prerequisites:
    1. Your environment variables on your computer (keys: [GOIT_DB_URL, GOIT_DB_USER, GOIT_DB_PASS])
    2. The `build.gradle` file in the flyway section
 4. Perform a flyway migration to initialise your database with the required data `./gradlew flywayMigrate`
-5. 
+5. Build the docker image `docker build -t travel-servlet:1.0 .`
+6. Once the image is built, run the image `docker run -d -p 8080:8080 --name travel-servlet --env-file .env travel-servlet:1.0` (Note this will use the .env file we setup earlier)
+7. You can then visit the website at http://localhost:8080/
+
